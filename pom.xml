@@ -25,6 +25,7 @@
 
     <modules>
         <module>hw01-maven</module>
+        <module>hw04-generics-collections</module>
     </modules>
 
     <properties>
@@ -34,6 +35,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <com.google.guava.version>27.1-jre</com.google.guava.version>
+        <junit.version>5.10.0</junit.version> <!-- Актуальная версия -->
         <my.variable>42</my.variable>
     </properties>
 
@@ -44,6 +46,13 @@
                 <artifactId>guava</artifactId>
                 <version>${com.google.guava.version}</version>
                 <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
