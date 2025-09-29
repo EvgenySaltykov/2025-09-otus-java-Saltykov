@@ -53,19 +53,23 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
-        if (c == null || c.isEmpty()) {
+        int cSize = c.size();
+        if (c == null || cSize == 0) {
             return false;
         }
 
-//        i f (elementData.length == 0) {
-//            size = DEFAULT_CAPACITY;
-//            elementData = new Object[size];
-//        }
-        int newSize = this.size + c.size();
-        if (newSize > this.elementData.length) {
-            int newCapacity = newSize + newSize / 2;
+        if (Integer.MAX_VALUE - this.size < cSize) {
+            throw new OutOfMemoryError("Required array size too large");
+        }
+
+        int newSize = this.size + cSize;
+        if (this.elementData.length < newSize) {
+            int newCapacity = elementData.length == 0
+                    ? Math.max(DEFAULT_CAPACITY, newSize)
+                    : Math.max(newSize, elementData.length + (elementData.length / 2));
             elementData = Arrays.copyOf(elementData, newCapacity);
         }
+
         System.arraycopy(c.toArray(), 0, this.elementData, this.size, c.size());
         this.size = newSize;
 
@@ -94,7 +98,7 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public Object[] toArray() {
-        throw new UnsupportedOperationException();
+        return Arrays.copyOf(elementData, size);
     }
 
     @Override

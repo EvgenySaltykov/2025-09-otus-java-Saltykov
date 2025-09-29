@@ -2,6 +2,8 @@ import org.junit.jupiter.api.Test;
 import otus.HomeWork.DIYarrayList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +31,7 @@ public class Test_DIY_Arr {
     @Test
     void addMultipleElements() {
         DIYarrayList<String> list = new DIYarrayList<>();
-        for(int i=0; i<15; i++) {
+        for (int i = 0; i < 15; i++) {
             list.add("str" + i);
         }
         assertEquals(15, list.size());
@@ -39,9 +41,40 @@ public class Test_DIY_Arr {
 
     @Test
     void addNullElements() {
-        DIYarrayList<Object> list = new DIYarrayList<> ();
+        DIYarrayList<Object> list = new DIYarrayList<>();
         assertTrue(list.add(null));
         assertNull(list.get(0));
         assertEquals(1, list.size());
+    }
+
+    @Test
+    void addAllNull() {
+        var list = new DIYarrayList<Integer> ();
+        for (int i=0; i<5; i++) {
+            list.add(i);
+        }
+        assertFalse(list.addAll(null));
+    }
+
+    @Test
+    void addAllEmpty() {
+        var list1 = new DIYarrayList<Integer>();
+        for (int i=0; i<5; i++) {
+            list1.add(i);
+        }
+        assertFalse(list1.addAll(new DIYarrayList<Integer>()));
+    }
+
+    @Test
+    void EmptyAddAllList() {
+        List list1 = new DIYarrayList<Integer>();
+        List list2 = new DIYarrayList<Integer>();
+        for (int i=0; i<5; i++) {
+            list2.add(i);
+        }
+        assertTrue(list1.addAll(list2));
+        assertEquals(5, list1.size());
+        assertEquals(0,list1.get(0));
+        assertEquals(4,list1.get(4));
     }
 }
