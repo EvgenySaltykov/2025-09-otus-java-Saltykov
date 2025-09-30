@@ -76,6 +76,17 @@ public class DIYarrayList<T> implements List<T> {
         return true;
     }
 
+    public static <T> void copy (List<? super T> dest, List<? extends T> src) {
+        int srcSize = src.size();
+        if (dest.size() < srcSize) {
+            throw new IndexOutOfBoundsException("Destination list is smaller than source list");
+        }
+
+        for (int i=0; i<srcSize; i++) {
+            dest.set(i, src.get(i));
+        }
+    }
+
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
         throw new UnsupportedOperationException();
