@@ -20,7 +20,7 @@ public class DIYarrayList<T> implements List<T> {
     @SuppressWarnings("unchecked")
     public T get(int index) {
         if (index < 0 || index >= size || elementData.length == 0) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("class !DIY_ArrayList Index!: " + index + ", Size: " + size);
         }
         return (T) elementData[index];
     }
@@ -59,7 +59,7 @@ public class DIYarrayList<T> implements List<T> {
         }
 
         if (Integer.MAX_VALUE - this.size < cSize) {
-            throw new OutOfMemoryError("Required array size too large");
+            throw new OutOfMemoryError("class DIY_ArrayList Required array size too large");
         }
 
         int newSize = this.size + cSize;
@@ -79,32 +79,41 @@ public class DIYarrayList<T> implements List<T> {
     public static <T> void copy (List<? super T> dest, List<? extends T> src) {
         int srcSize = src.size();
         if (dest.size() < srcSize) {
-            throw new IndexOutOfBoundsException("Destination list is smaller than source list");
+            throw new IndexOutOfBoundsException("class DIY_ArrayList Destination list is smaller than source list");
         }
 
-        for (int i=0; i<srcSize; i++) {
-            dest.set(i, src.get(i));
+        if (dest instanceof RandomAccess && src instanceof RandomAccess) {
+            for (int i = 0; i < srcSize; i++) {
+                dest.set(i, src.get(i));
+            }
+        } else {
+            ListIterator<? super T> di=dest.listIterator();
+            ListIterator<? extends T> si=src.listIterator();
+            for (int i=0; i<srcSize; i++) {
+                di.next();
+                di.set(si.next());
+            }
         }
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method addAll(int index, Collection<? extends T> c) not implemented");
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method isEmpty() not implemented");
     }
 
     @Override
     public boolean contains(Object o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method contains() not implemented");
     }
 
     @Override
     public Iterator<T> iterator() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method iterator() not implemented");
     }
 
     @Override
@@ -114,86 +123,154 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method toArray(T1[] a) not implemented");
     }
 
     @Override
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method remove() not implemented");
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method containsAll() not implemented");
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method removeAll() not implemented");
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method retainAll() not implemented");
     }
 
     @Override
     public void replaceAll(UnaryOperator<T> operator) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method replaceAll() not implemented");
     }
 
     @Override
     public void sort(Comparator<? super T> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method sort() not implemented");
     }
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method clear() not implemented");
     }
 
     @Override
     public T set(int index, T element) {
-        throw new UnsupportedOperationException();
+        if (index<0 || index >=size) {
+            throw new IndexOutOfBoundsException("class !DIY_ArrayList Index!: "+index+", Size: "+size);
+        }
+
+        T oldValue = (T) elementData[index];
+        this.elementData[index] = element;
+
+        return oldValue;
     }
 
     @Override
     public void add(int index, T element) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method add(int index, T element) not implemented");
     }
 
     @Override
     public T remove(int index) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method remove(int index) not implemented");
     }
 
     @Override
     public int indexOf(Object o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method indexOf() not implemented");
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method lastIndexOf() not implemented");
     }
 
     @Override
     public ListIterator<T> listIterator() {
-        throw new UnsupportedOperationException();
+        return new LstIterator();
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method listIterator(int index) not implemented");
     }
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method subList() not implemented");
     }
 
     @Override
     public Spliterator<T> spliterator() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("method spliterator() not implemented");
+    }
+
+    private class LstIterator implements ListIterator<T> {
+        private int cursor;       // index of next element to return
+        private int lastRet = -1; // index of last element returned; -1 if no such
+
+        public LstIterator() {
+            this.cursor = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            throw new UnsupportedOperationException("method hasNext() not implemented");
+        }
+
+        @Override
+        public T next() {
+            int i = cursor;
+            if (i >= size)
+                throw new NoSuchElementException("class !DIY_ArrayList no such element at index: " + i);
+            Object[] elementData = DIYarrayList.this.elementData;
+            if (i >= elementData.length)
+                throw new ConcurrentModificationException("class !DIY_ArrayList concurrent modification at index: " + i);
+            cursor = i + 1;
+            return (T) elementData[lastRet = i];
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            throw new UnsupportedOperationException("method hasPrevious() not implemented");
+        }
+
+        @Override
+        public T previous() {
+            throw new UnsupportedOperationException("method previous() not implemented");
+        }
+
+        @Override
+        public int nextIndex() {
+            throw new UnsupportedOperationException("method nextIndex() not implemented");
+        }
+
+        @Override
+        public int previousIndex() {
+            throw new UnsupportedOperationException("method previousIndex() not implemented");
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("method remove() not implemented");
+        }
+
+        @Override
+        public void set(T t) {
+            DIYarrayList.this.elementData[cursor] = t;
+        }
+
+        @Override
+        public void add(T t) {
+            throw new UnsupportedOperationException("method add() not implemented");
+        }
     }
 }
