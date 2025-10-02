@@ -54,7 +54,9 @@ public class Test_DIY_Arr {
         for (int i = 0; i < 5; i++) {
             list.add(i);
         }
-        assertFalse(list.addAll(null));
+        assertThrows(NullPointerException.class, () ->  {
+            list.addAll(null);
+        });
     }
 
     @Test
@@ -141,5 +143,21 @@ public class Test_DIY_Arr {
         assertEquals(10, destination.size());
         assertEquals(0, destination.get(0));
         assertEquals(2, destination.get(8));
+    }
+
+    @Test
+    void testCopyDIYarrayListToDIYarrayList() {
+        var list1 = new DIYarrayList<>();
+        var list2 = new DIYarrayList<>();
+        for (int i = 0; i>-35; i--) {
+            list1.add(i);
+        }
+        for (int i=9; i>0; i--) {
+            list2.add(i);
+        }
+        DIYarrayList.copy(list1, list2);
+        assertEquals(35, list1.size());
+        assertEquals(9, list1.get(0));
+        assertEquals(-34, list1.get(34));
     }
 }

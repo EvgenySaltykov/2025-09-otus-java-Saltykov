@@ -54,7 +54,10 @@ public class DIYarrayList<T> implements List<T> {
     @Override
     public boolean addAll(Collection<? extends T> c) {
         int cSize = c.size();
-        if (c == null || cSize == 0) {
+        if (c == null) {
+            throw new NullPointerException("Collection to add cannot be null");
+        }
+        if (c.isEmpty()) {
             return false;
         }
 
@@ -76,7 +79,7 @@ public class DIYarrayList<T> implements List<T> {
         return true;
     }
 
-    public static <T> void copy (List<? super T> dest, List<? extends T> src) {
+    public static <T> void copy(List<? super T> dest, List<? extends T> src) {
         int srcSize = src.size();
         if (dest.size() < srcSize) {
             throw new IndexOutOfBoundsException("class DIY_ArrayList Destination list is smaller than source list");
@@ -87,11 +90,14 @@ public class DIYarrayList<T> implements List<T> {
                 dest.set(i, src.get(i));
             }
         } else {
-            ListIterator<? super T> di=dest.listIterator();
-            ListIterator<? extends T> si=src.listIterator();
-            for (int i=0; i<srcSize; i++) {
+            ListIterator<? super T> di = dest.listIterator();
+            ListIterator<? extends T> si = src.listIterator();
+            for (int i = 0; i < srcSize; i++) {
                 di.next();
-                di.set(si.next());
+                T siNext = si.next();
+                di.set(siNext);
+
+//                di.set(si.next());
             }
         }
     }
@@ -163,8 +169,8 @@ public class DIYarrayList<T> implements List<T> {
 
     @Override
     public T set(int index, T element) {
-        if (index<0 || index >=size) {
-            throw new IndexOutOfBoundsException("class !DIY_ArrayList Index!: "+index+", Size: "+size);
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("class !DIY_ArrayList Index!: " + index + ", Size: " + size);
         }
 
         T oldValue = (T) elementData[index];
@@ -265,7 +271,10 @@ public class DIYarrayList<T> implements List<T> {
 
         @Override
         public void set(T t) {
-            DIYarrayList.this.elementData[cursor] = t;
+            if(lastRet == -1) {
+                throw new IllegalStateException("class !DIY_ArrayList illegal state, lastRet = -1");
+            }
+            DIYarrayList.this.elementData[lastRet] = t;
         }
 
         @Override
